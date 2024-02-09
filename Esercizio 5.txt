@@ -1,0 +1,145 @@
+1 SELECT count(*) as totaleVerbali
+  FROM [Esercizio5].[dbo].[VERBALE]
+
+2 SELECT count(*) as totaleVerbali
+  FROM [Esercizio5].[dbo].[VERBALE]
+  GROUP BY IDAnagrafica
+
+3 SELECT COUNT(*)
+  FROM [Esercizio5].[dbo].[VERBALE]
+  GROUP BY IDViolazione
+
+4 SELECT SUM (DecurtamentoPunti)
+  FROM [Esercizio5].[dbo].[VERBALE]
+  group by IDAnagrafica
+
+5 SELECT V.[DataViolazione],
+       V.[IndirizzoViolazione],
+       V.[Importo],
+       V.[DecurtamentoPunti],
+       A.[Nome],
+       A.[Cognome],
+	   A.[Citta]
+FROM [Esercizio5].[dbo].[VERBALE] V
+INNER JOIN [Esercizio5].[dbo].[ANAGRAFICA] A ON V.IDAnagrafica = A.idanagrafica
+where A.[Citta] = 'Palermo'
+
+6 SELECT V.[DataViolazione],
+       V.[Importo],
+       V.[DecurtamentoPunti],
+       A.[Nome],
+       A.[Cognome]
+FROM [Esercizio5].[dbo].[VERBALE] V
+INNER JOIN [Esercizio5].[dbo].[ANAGRAFICA] A ON V.IDAnagrafica = A.idanagrafica
+WHERE V.[Dataviolazione] BETWEEN '2009-02-01' AND '2009-07-31'
+
+
+7 SELECT sum(Importo)
+  FROM [Esercizio5].[dbo].[VERBALE]
+  GROUP BY IDAnagrafica
+
+8 SELECT TOP (1000) [IDAnagrafica]
+      ,[Cognome]
+      ,[Nome]
+      ,[Indirizzo]
+      ,[Citta]
+      ,[CAP]
+      ,[Cod_Fisc]
+  FROM [Esercizio5].[dbo].[ANAGRAFICA]
+  where Citta = 'Palermo'
+
+9 SELECT 
+      [DataViolazione]
+      ,[Importo]
+      ,[DecurtamentoPunti]
+  FROM [Esercizio5].[dbo].[VERBALE]
+  WHERE [Dataviolazione] BETWEEN '2024-03-01' AND '2024-12-31'
+
+10 SELECT [NominativoAgente], count(*)
+  FROM [Esercizio5].[dbo].[VERBALE]
+ group by NominativoAgente
+
+11 SELECT V.[DataViolazione],
+       V.[Importo],
+       V.[DecurtamentoPunti],
+       A.[Nome],
+       A.[Cognome],
+	   A.[Indirizzo]
+FROM [Esercizio5].[dbo].[VERBALE] V
+INNER JOIN [Esercizio5].[dbo].[ANAGRAFICA] A ON V.IDAnagrafica = A.idanagrafica
+where V.[DecurtamentoPunti] > 5 
+
+12 SELECT V.[DataViolazione],
+       V.[Importo],
+       V.[DecurtamentoPunti],
+       A.[Nome],
+       A.[Cognome],
+	   A.[Indirizzo]
+FROM [Esercizio5].[dbo].[VERBALE] V
+INNER JOIN [Esercizio5].[dbo].[ANAGRAFICA] A ON V.IDAnagrafica = A.idanagrafica
+where V.[Importo] > 400
+
+
+13 CREATE PROCEDURE VisualizzaContravvenzioniPerAnno
+    @Anno INT
+AS
+BEGIN
+    SELECT V.[DataViolazione],
+           V.[IndirizzoViolazione],
+           V.[Importo],
+           V.[DecurtamentoPunti],
+           A.[Nome],
+           A.[Cognome],
+           TV.[descrizione] AS TipoViolazione
+    FROM [Esercizio5].[dbo].[VERBALE] V
+    INNER JOIN [Esercizio5].[dbo].[ANAGRAFICA] A ON V.IDAnagrafica = A.idanagrafica
+    INNER JOIN [Esercizio5].[dbo].[TIPO_VIOLAZIONE] TV ON V.IDViolazione = TV.idviolazione
+    WHERE YEAR(V.[DataViolazione]) = @Anno;
+END; 
+
+
+1 ALTER PROCEDURE [dbo].[ContravvenzioniPerAnno]
+    @Anno INT
+AS
+BEGIN
+    SELECT V.[DataViolazione],
+           V.[IndirizzoViolazione],
+           V.[Importo],
+           V.[DecurtamentoPunti],
+           A.[Nome],
+           A.[Cognome],
+           TV.[descrizione] AS TipoViolazione
+    FROM [Esercizio5].[dbo].[VERBALE] V
+    INNER JOIN [Esercizio5].[dbo].[ANAGRAFICA] A ON V.IDAnagrafica = A.idanagrafica
+    INNER JOIN [Esercizio5].[dbo].[TIPO_VIOLAZIONE] TV ON V.IDViolazione = TV.idviolazione
+    WHERE YEAR(V.[DataViolazione]) = @Anno;
+END;
+
+
+
+2 ALTER PROCEDURE [dbo].[VisualizzaTotalePuntiDecurtatiPerData]
+    @Data date
+AS
+BEGIN
+    SELECT SUM(V.DecurtamentoPunti) AS TotalePuntiDecurtati
+    FROM [Esercizio5].[dbo].[VERBALE] V
+    WHERE CONVERT(date, V.[DataViolazione]) = @Data;
+END;
+
+3 CREATE PROCEDURE EliminaVerbale
+    @IDVerbale int
+AS
+BEGIN
+    DELETE FROM [Esercizio5].[dbo].[VERBALE]
+    WHERE IDVerbale = @IDVerbale;
+END;
+
+
+
+
+
+
+
+
+
+
